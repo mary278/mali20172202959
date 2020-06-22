@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- SQL映射文件 -->
+<mapper namespace="cn.smbms.dao.role.RoleMapper">
+    <select id="getRoleList" resultType="Role">
+        select * from smbms_role
+    </select>
+
+    <select id="getRoleList1" resultType="Role">
+        select * from smbms_role
+          where 1=1
+            <if test="roleName!=null and roleName!=''">
+               and roleName like CONCAT('%',#{roleName},'%')
+            </if>
+
+    </select>
+</mapper>

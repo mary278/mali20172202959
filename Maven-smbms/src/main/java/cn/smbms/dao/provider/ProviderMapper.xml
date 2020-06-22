@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.smbms.dao.provider.ProviderMapper">
+
+    <select id="proList" resultType="Provider">
+        select * from smbms_provider
+           where 1=1
+            <if test="proCode!=null and proCode!=''">
+                and proCode like CONCAT('%',#{proCode},'%')
+            </if>
+            <if test="proName!=null and proName!=''">
+                and proName like CONCAT('%',#{proName},'%')
+            </if>
+           order by creationDate DESC limit #{currentPageNo},#{pageSize}
+    </select>
+
+   <select id="proCount" resultType="int">
+       select count(1) from smbms_provider
+       where 1=1
+           <if test="proCode!=null and proCode!=''">
+             and proCode like CONCAT('%',#{proCode},'%')
+           </if>
+           <if test="proName!=null and proName!=''">
+              and proName like CONCAT('%',#{proName},'%')
+           </if>
+   </select>
+
+    <select id="list" resultType="Provider">
+        select * from smbms_provider
+    </select>
+
+    <insert id="addProvide" parameterType="Provider">
+     INSERT INTO `smbms`.`smbms_provider` (`proCode`,`proName`,`proDesc`,
+     `proPhone`,`proAddress`,`proFax`,`creationDate`,`createdBy`,`proContact`,`companyLicPicPath`,`orgCodePicPath`)
+       VALUES(#{proCode},#{proName},#{proDesc},#{proPhone},
+       #{proAddress},#{proFax},#{creationDate},#{createdBy},#{proContact},#{companyLicPicPath},#{orgCodePicPath}) ;
+    </insert>
+
+    <!--使用if+trim实现对供应商表的修改-->
+    <update id="modifyPro" parameterType="Provider">
+        update smbms_provider
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+            <if test="proCode!=null">proCode=#{proCode},</if>
+            <if test="proName!=null">proName=#{proName},</if>
+            <if test="proDesc!=null">proDesc=#{proDesc},</if>
+            <if test="proContact!=null">proContact=#{proContact},</if>
+            <if test="proPhone!=null">proPhone=#{proPhone},</if>
+            <if test="proAddress!=null">proAddress=#{proAddress},</if>
+            <if test="proFax!=null">proFax=#{proFax},</if>
+            <if test="modifyBy!=null">modifyBy=#{modifyBy},</if>
+            <if test="modifyDate!=null">modifyDate=#{modifyDate},</if>
+        </trim>
+    </update>
+    
+    <select id="ProView" resultType="Provider">
+         select * from smbms_provider where id=#{id}
+    </select>
+
+</mapper>
